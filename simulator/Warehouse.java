@@ -77,6 +77,10 @@ public class Warehouse {
         return collector;
     }
 
+    public int[][] getwarehousearray() {
+        return warehouseArray;
+    }
+
     /**
      * Returns the Square that has the coordinates given as the argument
      * @param coord

@@ -16,6 +16,8 @@ public class Director implements Runnable {
 
     private Factory.Package currentPackage;
 
+    private int[][] warehousearray;
+
     public Director(Warehouse whouse, Simulator sim, BlockingQueue<Factory.Package> pckgs) {
         this.whouse = whouse;
         this.sim = sim;
@@ -56,9 +58,15 @@ public class Director implements Runnable {
         }
     }
 
-    private void sendCollectorTo(Coord dest) {
+    private void sendCollectorTo(Coord dest)
+    {
+        warehousearray = whouse.getwarehousearray();
+        Coord destination = dest;
+        if (warehousearray[dest.Y()][dest.X()] == 2) {
+            destination = new Coord(dest.X() + 1, dest.Y());
+        }
 
-        for (Collector.Step step: getCollectorSteps(dest)) {
+        for (Collector.Step step: getCollectorSteps(destination)) {
             completeCollectorStep(step);
         }
     }
@@ -153,6 +161,49 @@ public class Director implements Runnable {
     public void move() throws InterruptedException {
         while (true) {
 
+            if((!collector.isloaded()) && (!packages.isEmpty()))
+            {
+                currentPackage = packages.take();
+                Coord packageSrc = currentPackage.getSource();
+                sendCollectorTo(packageSrc);
+                // Unload the entry
+                for (EntrySquare entry: whouse.getEntries()) {
+                    if (entry.getCoordinates().equals(packageSrc)) {
+                        entry.unload();
+                    }
+                }
+                Thread.sleep(300);
+                sim.setDestinationCoord(currentPackage.getDestination());
+                collector.load();
+            }
+            if((collector.isloaded()) && (!transporter.isloaded()) && currentPackage!=null)
+            {
+                int collectY = 0, collectX = 0;
+                Coord collectorPosition = collector.getCoordinates();
+                
+                collectX = collectorPosition.X();
+                if (collectorPosition.Y() < ((sim.SQUARE_PER_LINE)/2)) {
+                    collectY = collectorPosition.Y() + 1;
+                } else {
+                    collectY = collectorPosition.Y() - 1;
+                }
+                sendTransporterTo(new Coord(collectX, collectY));
+                Thread.sleep(300);
+                sim.setDestinationCoord(currentPackage.getDestination());
+                collector.unload();
+                transporter.load();
+            }
+            if((transporter.isloaded()) && currentPackage != null) {
+                Coord packageDest = currentPackage.getDestination();
+                sendTransporterTo(packageDest);
+
+                Thread.sleep(300);
+
+                currentPackage = null;
+                sim.setDestinationCoord(null);
+                transporter.unload();
+            }
+            /*
             if (currentPackage == null && !packages.isEmpty()) {
                 currentPackage = packages.take();
                 Coord packageSrc = currentPackage.getSource();
@@ -180,6 +231,7 @@ public class Director implements Runnable {
                 System.out.println("Go to base");
                 sendTransporterToBase();
             }
+            */
         }
     }
 

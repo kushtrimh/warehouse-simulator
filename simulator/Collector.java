@@ -18,6 +18,7 @@ public class Collector extends SimElement {
     private Image xImg;
 
     private Image img;
+    private boolean loaded;
 
 
     public Collector(Coord startCoordinates) throws SimulatorException {
@@ -26,6 +27,12 @@ public class Collector extends SimElement {
         updatePixelValues();
         setImages();
     }
+
+    public boolean isloaded() { return loaded; }
+
+    public void load() { loaded = true; }
+
+    public void unload() { loaded = false; }
 
     public Image getImage() { return img; }
 
@@ -69,7 +76,7 @@ public class Collector extends SimElement {
      * on its current coordinates.
      */
     private void updatePixelValues() {
-        int[] pixelValues = Coord.getCoordinatePixelValuesCollector(coord);
+        int[] pixelValues = Coord.getCoordinatePixelValues(coord);
         xVal = pixelValues[0];
         yVal = pixelValues[1];
     }

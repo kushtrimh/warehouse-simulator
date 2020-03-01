@@ -18,6 +18,7 @@ public class Transporter extends SimElement {
     private Image xImg;
 
     private Image img;
+    private boolean loaded;
 
 
     public Transporter(Coord startCoordinates) throws SimulatorException {
@@ -28,6 +29,12 @@ public class Transporter extends SimElement {
     }
 
     public Image getImage() { return img; }
+
+    public boolean isloaded() { return loaded; }
+
+    public void load() { loaded = true; }
+
+    public void unload() { loaded = false; }
 
     public Coord getCoordinates() {
         return coord;
@@ -69,7 +76,7 @@ public class Transporter extends SimElement {
      * on its current coordinates.
      */
     private void updatePixelValues() {
-        int[] pixelValues = Coord.getCoordinatePixelValuesTransporter(coord);
+        int[] pixelValues = Coord.getCoordinatePixelValues(coord);
         xVal = pixelValues[0];
         yVal = pixelValues[1];
     }
