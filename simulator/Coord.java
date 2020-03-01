@@ -52,6 +52,54 @@ public class Coord {
         return null;
     }
 
+    public static int[] getCoordinatePixelValuesTransporter(Coord coord) {
+        if (!isValid(coord))
+            return null;
+
+        int xCoord = coord.X(), yCoord = coord.Y();
+        int xVal = 0, yVal = 0; // Pixel values, starting at 0
+
+        for (int y = 0; y < Simulator.SQUARE_PER_LINE; y++) {
+            for (int x = 0; x < Simulator.SQUARE_PER_LINE; x++) {
+                // If the coordinates match, return the x value and y value
+                // for the coordinate
+                if (x == xCoord && y == yCoord) {
+                    return new int[] {xVal, yVal};
+                }
+
+                xVal += Simulator.SQUARE_SIZE; // Increment xVal
+            }
+            xVal = 0; // Reset the xValue for the next iteration
+            yVal += Simulator.SQUARE_SIZE; // Increment yVal
+        }
+
+        return null;
+    }
+
+    public static int[] getCoordinatePixelValuesDestination(Coord coord) {
+        if (!isValid(coord))
+            return null;
+
+        int xCoord = coord.X() + 1, yCoord = coord.Y();
+        int xVal = 0, yVal = 0; // Pixel values, starting at 0
+
+        for (int y = 0; y < Simulator.SQUARE_PER_LINE; y++) {
+            for (int x = 0; x < Simulator.SQUARE_PER_LINE; x++) {
+                // If the coordinates match, return the x value and y value
+                // for the coordinate
+                if (x == xCoord && y == yCoord) {
+                    return new int[] {xVal, yVal};
+                }
+
+                xVal += Simulator.SQUARE_SIZE; // Increment xVal
+            }
+            xVal = 0; // Reset the xValue for the next iteration
+            yVal += Simulator.SQUARE_SIZE; // Increment yVal
+        }
+
+        return null;
+    }
+
 
     public Coord(int x, int y) {
         this.x = x;

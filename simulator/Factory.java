@@ -16,9 +16,9 @@ public class Factory implements Runnable {
      * A list of the Block Squares representing the destination
      * to which the packages will be send.
      */
-    private List<BlockSquare> destinations;
+    private List<DestinationSquare> destinations;
 
-    public Factory(List<EntrySquare> entr, List<BlockSquare> dests, BlockingQueue<Package> pckgs) throws SimulatorException {
+    public Factory(List<EntrySquare> entr, List<DestinationSquare> dests, BlockingQueue<Package> pckgs) throws SimulatorException {
         if (entr == null || pckgs == null || dests == null)
             throw new SimulatorException("Parameters of class: " + getClass().getSimpleName() + " should not be null.");
 

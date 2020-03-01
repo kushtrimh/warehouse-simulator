@@ -141,7 +141,7 @@ public class Simulator {
          */
         private void drawDestination(Graphics g) {
             if (destinationCoordinate != null) {
-                int[] values = Coord.getCoordinatePixelValues(destinationCoordinate);
+                int[] values = Coord.getCoordinatePixelValuesDestination(destinationCoordinate);
                 g.drawImage(destCoordImage, values[0], values[1], null);
             }
         }
@@ -152,7 +152,7 @@ public class Simulator {
 
             // Draw
             drawSquares(g);
-            drawDestination(g);
+            //drawDestination(g);
             drawTransporter(g);
             // drawSquareNumbers(g); // Debugging only
             // drawCoordinates(g); // Debugging only

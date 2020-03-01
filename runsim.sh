@@ -1,0 +1,2 @@
+javac WarehouseSimulator.java
+java WarehouseSimulator

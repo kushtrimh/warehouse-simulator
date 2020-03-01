@@ -11,7 +11,7 @@ public class WarehouseSimulator {
             Simulator s = new Simulator(w);
 
             BlockingQueue<Factory.Package> packages = new ArrayBlockingQueue<>(w.getEntries().size());
-            Thread factoryThread = new Thread(new Factory(w.getEntries(), w.getBlockSquares(), packages));
+            Thread factoryThread = new Thread(new Factory(w.getEntries(), w.getDestinationSquares(), packages));
             Thread directorThread = new Thread(new Director(w, s, packages));
 
             factoryThread.start();

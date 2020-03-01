@@ -69,7 +69,7 @@ public class Transporter extends SimElement {
      * on its current coordinates.
      */
     private void updatePixelValues() {
-        int[] pixelValues = Coord.getCoordinatePixelValues(coord);
+        int[] pixelValues = Coord.getCoordinatePixelValuesTransporter(coord);
         xVal = pixelValues[0];
         yVal = pixelValues[1];
     }

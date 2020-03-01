@@ -22,6 +22,7 @@ public class Warehouse {
     private List<EntrySquare> entries;
     private List<PathSquare> pathSquares;
     private List<BlockSquare> blockSquares;
+    private List<DestinationSquare> destinationSquares;
 
     /**
      * An array representing the warehouse.
@@ -36,6 +37,7 @@ public class Warehouse {
         squares = new ArrayList<>();
         pathSquares = new ArrayList<>();
         blockSquares = new ArrayList<>();
+        destinationSquares = new ArrayList<>();
         entries = new ArrayList<>();
 
         if (warehouseFilename == null)
@@ -58,8 +60,8 @@ public class Warehouse {
         return pathSquares;
     }
 
-    public List<BlockSquare> getBlockSquares() {
-        return blockSquares;
+    public List<DestinationSquare> getDestinationSquares() {
+        return destinationSquares;
     }
 
     public List<EntrySquare> getEntries() {
@@ -124,6 +126,7 @@ public class Warehouse {
 
                 boolean isBlock = arr[yCoord][xCoord] == 1;
                 boolean isEntry = arr[yCoord][xCoord] == 2;
+                boolean isDestination = arr[yCoord][xCoord] == 3;
 
                 Square sqr;
                 if (isBlock) {
@@ -133,7 +136,11 @@ public class Warehouse {
                     sqr = new EntrySquare(xval, yval, new Coord(xCoord++, yCoord), squareNumber++);
                     entries.add((EntrySquare) sqr);
                     pathSquares.add((EntrySquare) sqr);
-                } else {
+                } else if (isDestination) {
+                    sqr = new DestinationSquare(xval, yval, new Coord(xCoord++, yCoord));
+                    destinationSquares.add((DestinationSquare) sqr);
+                }
+                else {
                     sqr = new RoadSquare(xval, yval, new Coord(xCoord++, yCoord), squareNumber++);
                     pathSquares.add((RoadSquare) sqr);
                 }
@@ -159,8 +166,8 @@ public class Warehouse {
         // Add all the edges
         for (int y = 0; y < Simulator.SQUARE_PER_LINE; y++) {
             for (int x = 0; x < Simulator.SQUARE_PER_LINE; x++) {
-                // Don't proceed to add edges if the current square is a block or an entry
-                if (warehouseArray[y][x] == 1)
+                // Don't proceed to add edges if the current square is a block, destination or an entry
+                if (warehouseArray[y][x] == 1 || warehouseArray[y][x] == 3)
                     continue;
 
                 Square s = getSquare(x, y);
@@ -188,7 +195,7 @@ public class Warehouse {
 
         // If it is a block or entry square, or there is no square at the given coordinates
         // simply return from the method
-        if (w == null || w instanceof BlockSquare) {
+        if (w == null || w instanceof BlockSquare || w instanceof DestinationSquare) {
             return;
         }
         // If a square exists at the given coordinates connect the found square w,
@@ -210,6 +217,7 @@ public class Warehouse {
         BufferedImage floorImg;
         BufferedImage unloadedEntryImg;
         BufferedImage loadedEntryImg;
+        BufferedImage destinationImage;
 
         try {
             blocksEdgeImg = ImageIO.read(Warehouse.class.getResource("/images/blocks-edge.png"));
@@ -217,6 +225,8 @@ public class Warehouse {
             floorImg = ImageIO.read(Warehouse.class.getResource("/images/floor-gray.png"));
             unloadedEntryImg = ImageIO.read(Warehouse.class.getResource("/images/unloaded-entry.png"));
             loadedEntryImg = ImageIO.read(Warehouse.class.getResource("/images/loaded-entry.png"));
+            destinationImage = ImageIO.read(Warehouse.class.getResource("/images/destination.png"));
+
         } catch (IOException ex) {
             throw new SimulatorException(ex.getMessage());
         }
@@ -242,8 +252,12 @@ public class Warehouse {
                     EntrySquare entry = (EntrySquare) currentSquare;
                     entry.setImages(loadedEntryImg, unloadedEntryImg);
                 } else {
-                    // Add floor image otherwise
-                    currentSquare.setImage(floorImg);
+                    if (warehouseArray[y][x] == 3) {
+                        currentSquare.setImage(destinationImage);
+                    } else {
+                        // Add floor image otherwise
+                        currentSquare.setImage(floorImg);
+                    }
                 }
             }
         }
@@ -254,15 +268,24 @@ public class Warehouse {
      * a text file as an input.
      */
     private void loadWarehouse(String flname) throws SimulatorException {
-        String line;
+        String line = "";
+        String tempLine;
         int pos = 0; // Tracks the position in the array 'splitted' array
 
         try (BufferedReader reader = new BufferedReader(new FileReader(flname))) {
-            line = reader.readLine();
+            tempLine = reader.readLine();
+            tempLine = tempLine.trim();
+            line = tempLine;
+            while(tempLine != null)
+            {
+                tempLine = reader.readLine();
+                if(tempLine != null)
+                line = line + " " + tempLine;
+            }
         } catch (IOException ex) {
             throw new SimulatorException("There was a problem loading the warehouse file.");
         }
-
+        line = line.trim();
         try {
             int squarePerLine = Simulator.SQUARE_PER_LINE;
             // Split the line from the file using spaces as delimiter
@@ -293,7 +316,7 @@ public class Warehouse {
      * Sets the destination square for each block square.
      */
     public void setDestinationSquares() {
-        for (BlockSquare block: blockSquares) {
+        for (DestinationSquare block: destinationSquares) {
             Coord coord = block.getCoordinates();
             // Check for the left destination square
             Coord left = new Coord(coord.X() - 1, coord.Y());
@@ -303,12 +326,14 @@ public class Warehouse {
             }
 
             // Check for the right destination square
+            //Human will be on the left of grid - so no need for this       
+            /*
             Coord right = new Coord(coord.X() + 1, coord.Y());
             if (Coord.isValid(right)) {
                 RoadSquare sqr = (RoadSquare) getSquare(right);
                 block.addDestination(sqr);
             }
-
+            */
         }
     }
 
@@ -317,7 +342,7 @@ public class Warehouse {
      * Debugging only
      */
     public void printDestinationSquares() {
-        for (BlockSquare sqr: blockSquares) {
+        for (DestinationSquare sqr: destinationSquares) {
             StringBuilder sb = new StringBuilder();
             sb.append(sqr.getCoordinates()).append(": ");
             for (RoadSquare psqr: sqr.getDestinations()) {
@@ -330,6 +355,7 @@ public class Warehouse {
     /**
      * TEMPORARY
      */
+    /*
     private int[][] generateSquares() {
         return new int[][] {
                 {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0},
@@ -350,4 +376,5 @@ public class Warehouse {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         };
     }
+    */
 }
