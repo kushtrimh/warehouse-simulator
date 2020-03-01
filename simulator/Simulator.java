@@ -136,6 +136,12 @@ public class Simulator {
             g.drawImage(t.getImage(), t.xValue(), t.yValue(), null);
         }
 
+        private void drawCollector(Graphics g) {
+            Collector c = whouse.getCollector();
+
+            g.drawImage(c.getImage(), c.xValue(), c.yValue(), null);
+        }
+
         /**
          * Draws a green circle at the destination coordinate.
          */
@@ -154,6 +160,7 @@ public class Simulator {
             drawSquares(g);
             //drawDestination(g);
             drawTransporter(g);
+            drawCollector(g);
             // drawSquareNumbers(g); // Debugging only
             // drawCoordinates(g); // Debugging only
         }

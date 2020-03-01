@@ -28,7 +28,7 @@ public class Coord {
      * @return an int array consisting the pixel values for x at (int[0]) and y at (int[1]),
      *         returns null if the given coordinate argument is null or not valid
      */
-    public static int[] getCoordinatePixelValues(Coord coord) {
+    public static int[] getCoordinatePixelValuesCollector(Coord coord) {
         if (!isValid(coord))
             return null;
 

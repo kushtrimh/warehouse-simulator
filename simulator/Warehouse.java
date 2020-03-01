@@ -17,6 +17,7 @@ public class Warehouse {
 
     private Graph graph;
     private Transporter transporter;
+    private Collector collector;
     private List<Square> squares;
 
     private List<EntrySquare> entries;
@@ -70,6 +71,10 @@ public class Warehouse {
 
     public Transporter getTransporter() {
         return transporter;
+    }
+
+    public Collector getCollector() {
+        return collector;
     }
 
     /**
@@ -302,6 +307,11 @@ public class Warehouse {
 
             // Get the transporter start coordinates
             transporter = new Transporter(
+                    new Coord(Integer.parseInt(splitted[pos++]), Integer.parseInt(splitted[pos++]))
+            );
+
+            //Get the collector start coordinates
+            collector = new Collector(
                     new Coord(Integer.parseInt(splitted[pos++]), Integer.parseInt(splitted[pos++]))
             );
 

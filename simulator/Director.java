@@ -10,6 +10,7 @@ public class Director implements Runnable {
     private Simulator sim;
 
     private Transporter transporter;
+    private Collector collector;
 
     private BlockingQueue<Factory.Package> packages;
 
@@ -19,6 +20,7 @@ public class Director implements Runnable {
         this.whouse = whouse;
         this.sim = sim;
         transporter = whouse.getTransporter();
+        collector = whouse.getCollector();
         packages = pckgs;
 
         // Make qito me 1 ven
@@ -28,7 +30,7 @@ public class Director implements Runnable {
         transporter.convertPathToSteps(bfs.pathTo(whouse.getPathSquare(new Coord(0, 0))));
     }
 
-    private Iterable<Transporter.Step> getSteps(Coord dest) {
+    private Iterable<Transporter.Step> getTransporterSteps(Coord dest) {
         BreadthFirstPaths bfs = new BreadthFirstPaths(
                 whouse.getGraph(),
                 whouse.getPathSquare(transporter.getCoordinates())
@@ -38,15 +40,24 @@ public class Director implements Runnable {
         );
     }
 
-    private void goTo(Coord dest) {
+    private Iterable<Collector.Step> getCollectorSteps(Coord dest) {
+        BreadthFirstPaths bfs = new BreadthFirstPaths(
+            whouse.getGraph(), whouse.getPathSquare(collector.getCoordinates())
+        );
+        return collector.convertPathToSteps(
+            bfs.pathTo(whouse.getPathSquare(dest))
+        );
+    }
 
-        for (Transporter.Step step: getSteps(dest)) {
+    private void sendTransporterTo(Coord dest) {
+
+        for (Transporter.Step step: getTransporterSteps(dest)) {
             completeStep(step);
         }
     }
 
-    private void goToBase() {
-        for (Transporter.Step step: getSteps(transporter.getBaseCoords())) {
+    private void sendTransporterToBase() {
+        for (Transporter.Step step: getTransporterSteps(transporter.getBaseCoords())) {
             completeStep(step);
 
             if (!packages.isEmpty()) {
@@ -94,7 +105,7 @@ public class Director implements Runnable {
             if (currentPackage == null && !packages.isEmpty()) {
                 currentPackage = packages.take();
                 Coord packageSrc = currentPackage.getSource();
-                goTo(packageSrc);
+                sendTransporterTo(packageSrc);
                 // Unload the entry
                 for (EntrySquare entry: whouse.getEntries()) {
                     if (entry.getCoordinates().equals(packageSrc)) {
@@ -107,7 +118,7 @@ public class Director implements Runnable {
 
             } else if (currentPackage != null){
                 Coord packageDest = currentPackage.getDestination();
-                goTo(packageDest);
+                sendTransporterTo(packageDest);
 
                 Thread.sleep(300);
 
@@ -116,7 +127,7 @@ public class Director implements Runnable {
 
             } else {
                 System.out.println("Go to base");
-                goToBase();
+                sendTransporterToBase();
             }
         }
     }
