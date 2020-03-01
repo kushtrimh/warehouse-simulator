@@ -52,13 +52,20 @@ public class Director implements Runnable {
     private void sendTransporterTo(Coord dest) {
 
         for (Transporter.Step step: getTransporterSteps(dest)) {
-            completeStep(step);
+            completeTransporterStep(step);
+        }
+    }
+
+    private void sendCollectorTo(Coord dest) {
+
+        for (Collector.Step step: getCollectorSteps(dest)) {
+            completeCollectorStep(step);
         }
     }
 
     private void sendTransporterToBase() {
         for (Transporter.Step step: getTransporterSteps(transporter.getBaseCoords())) {
-            completeStep(step);
+            completeTransporterStep(step);
 
             if (!packages.isEmpty()) {
                 System.out.println("Switch directions, not to the base!! To the PACKAGE!!"); // Debugging only
@@ -67,7 +74,51 @@ public class Director implements Runnable {
         }
     }
 
-    private void completeStep(Transporter.Step step) {
+    private void sendCollectorToBase() {
+        for (Collector.Step step: getCollectorSteps(collector.getBaseCoords())) {
+            completeCollectorStep(step);
+
+            if (!packages.isEmpty()) {
+                System.out.println("Switch directions, not to the base!! To the PACKAGE!!"); // Debugging only
+                break;
+            }
+        }
+    }
+
+    private void completeCollectorStep(Collector.Step step) {
+        collector.setImage(step.getDirection());
+
+        while (!step.completed()) {
+            step.advance();
+
+            switch (step.getDirection()) {
+                case Collector.Step.DOWN:
+                    collector.setYValue(collector.yValue() + 5);
+                    break;
+                case Collector.Step.UP:
+                    collector.setYValue(collector.yValue() - 5);;
+                    break;
+                case Collector.Step.LEFT:
+                    collector.setXValue(collector.xValue() - 5);;
+                    break;
+                case Collector.Step.RIGHT:
+                    collector.setXValue(collector.xValue() + 5);;
+                    break;
+            }
+
+            try {
+                Thread.sleep(Simulator.FPS);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+
+            // Update the coordinates of the collector
+            collector.updateCoordinates(step.getSquare().getCoordinates());
+        }
+    }
+
+
+    private void completeTransporterStep(Transporter.Step step) {
         transporter.setImage(step.getDirection());
 
         while (!step.completed()) {
