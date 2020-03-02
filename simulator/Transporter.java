@@ -17,6 +17,9 @@ public class Transporter extends SimElement {
     private Image yImg;
     private Image xImg;
 
+    private Image yImgLoaded;
+    private Image xImgLoaded;
+
     private Image img;
     private boolean loaded;
     private Payload payload;
@@ -95,17 +98,21 @@ public class Transporter extends SimElement {
 
     private void setImages() throws SimulatorException {
         try {
-            xImg = ImageIO.read(
-                    Transporter.class.getResource("/images/transporter-left-right.png"));
-            yImg = ImageIO.read(
-                    Transporter.class.getResource("/images/transporter-up-down.png"));
+            xImg = ImageIO.read(Transporter.class.getResource("/images/transporter-left-right.png"));
+            xImgLoaded = ImageIO.read(Transporter.class.getResource("/images/transporter-left-right-loaded.png"));
+            yImg = ImageIO.read(Transporter.class.getResource("/images/transporter-up-down.png"));
+            yImgLoaded = ImageIO.read(Transporter.class.getResource("/images/transporter-up-down-loaded.png"));
         } catch (IOException ex) {
             throw new SimulatorException(ex.getMessage());
         }
     }
 
     public void setImage(int direction) {
-        img = direction == Transporter.Step.DOWN || direction == Transporter.Step.UP ? yImg : xImg;
+        if(loaded) {
+            img = ((direction == Transporter.Step.DOWN) || (direction == Transporter.Step.UP)) ? yImgLoaded : xImgLoaded;
+        } else {
+            img = ((direction == Transporter.Step.DOWN) || (direction == Transporter.Step.UP)) ? yImg : xImg;
+        }
     }
 
     public void setXValue(int xvalue) {

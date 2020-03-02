@@ -17,6 +17,9 @@ public class Collector extends SimElement {
     private Image yImg;
     private Image xImg;
 
+    private Image yImgLoaded;
+    private Image xImgLoaded;
+
     private Image img;
     private boolean loaded;
     private Payload payload;
@@ -96,14 +99,20 @@ public class Collector extends SimElement {
     private void setImages() throws SimulatorException {
         try {
             xImg = ImageIO.read(Collector.class.getResource("/images/collector-left-right.png"));
+            xImgLoaded = ImageIO.read(Transporter.class.getResource("/images/collector-left-right-loaded.png"));
             yImg = ImageIO.read(Collector.class.getResource("/images/collector-up-down.png"));
+            yImgLoaded = ImageIO.read(Transporter.class.getResource("/images/collector-up-down-loaded.png"));
         } catch (IOException ex) {
             throw new SimulatorException(ex.getMessage());
         }
     }
 
     public void setImage(int direction) {
-        img = direction == Collector.Step.DOWN || direction == Collector.Step.UP ? yImg : xImg;
+        if(loaded) {
+            img = ((direction == Transporter.Step.DOWN) || (direction == Transporter.Step.UP)) ? yImgLoaded : xImgLoaded;
+        } else {
+            img = ((direction == Transporter.Step.DOWN) || (direction == Transporter.Step.UP)) ? yImg : xImg;
+        }
     }
 
     public void setXValue(int xvalue) {
