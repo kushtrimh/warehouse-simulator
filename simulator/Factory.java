@@ -52,7 +52,7 @@ public class Factory implements Runnable {
             }
 
             try {
-                Thread.sleep(2000);
+                Thread.sleep(3000);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
