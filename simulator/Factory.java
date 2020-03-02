@@ -4,25 +4,25 @@ import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * This class is used to handle the creation of packages
+ * This class is used to handle the creation of payloads
  * that will be transported by the Transporter.
  */
 public class Factory implements Runnable {
 
-    private BlockingQueue<Package> packages;
+    private BlockingQueue<Payload> payloads;
     private List<EntrySquare> entries;
 
     /**
      * A list of the Block Squares representing the destination
-     * to which the packages will be send.
+     * to which the payloads will be send.
      */
     private List<DestinationSquare> destinations;
 
-    public Factory(List<EntrySquare> entr, List<DestinationSquare> dests, BlockingQueue<Package> pckgs) throws SimulatorException {
-        if (entr == null || pckgs == null || dests == null)
+    public Factory(List<EntrySquare> entr, List<DestinationSquare> dests, BlockingQueue<Payload> pylds) throws SimulatorException {
+        if (entr == null || pylds == null || dests == null)
             throw new SimulatorException("Parameters of class: " + getClass().getSimpleName() + " should not be null.");
 
-        packages = pckgs;
+        payloads = pylds;
         destinations = dests;
         entries = entr;
     }
@@ -43,12 +43,12 @@ public class Factory implements Runnable {
                 // Select one of the destination coordinates randomly
                 Coord destination = dstCoords.get(r.nextInt(dstCoords.size())).getCoordinates();
 
-                // Add the new package to the queue
-                packages.add(new Package(entry.getCoordinates(), destination));
+                // Add the new payload to the queue
+                payloads.add(new Payload(entry.getCoordinates(), destination));
                 entry.load();
 
-                System.out.println("Package added.");
-                System.out.println(packages);
+                System.out.println("Payload added.");
+                System.out.println(payloads);
             }
 
             try {
@@ -56,33 +56,6 @@ public class Factory implements Runnable {
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
-        }
-    }
-
-    /**
-     * Represents a package that will be transported by the Transporter.
-     */
-    public class Package {
-
-        private Coord source;
-        private Coord destination;
-
-        private Package(Coord src, Coord dst) {
-            source = src;
-            destination = dst;
-        }
-
-        public Coord getSource() {
-            return source;
-        }
-
-        public Coord getDestination() {
-            return destination;
-        }
-
-        @Override
-        public String toString() {
-            return "Package[" + source + ": " + destination + "]";
         }
     }
 }

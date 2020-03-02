@@ -19,6 +19,7 @@ public class Collector extends SimElement {
 
     private Image img;
     private boolean loaded;
+    private Payload payload;
 
 
     public Collector(Coord startCoordinates) throws SimulatorException {
@@ -30,9 +31,19 @@ public class Collector extends SimElement {
 
     public boolean isloaded() { return loaded; }
 
-    public void load() { loaded = true; }
+    public void load(Payload pkg) {
+        payload = pkg;
+        loaded = true;
+    }
 
-    public void unload() { loaded = false; }
+    public void unload() {
+        loaded = false;
+        payload = null;
+    }
+
+    public Payload getPayload() {
+        return payload;
+    }
 
     public Image getImage() { return img; }
 

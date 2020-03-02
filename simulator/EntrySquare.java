@@ -3,7 +3,7 @@ package simulator;
 import java.awt.Image;
 
 /**
- * An Entry Square is a square from which packages
+ * An Entry Square is a square from which payloads
  * will be taken by the Transporter.
  */
 public class EntrySquare extends Square {
@@ -16,8 +16,8 @@ public class EntrySquare extends Square {
     private Image unloadedImg;
 
     /**
-     * If 'loaded' is true then this entry square has a package on it that is waiting
-     * to be taken, if not there is not a package yet on this entry.
+     * If 'loaded' is true then this entry square has a payload on it that is waiting
+     * to be taken, if not there is not a payload yet on this entry.
      */
     private boolean loaded;
 
