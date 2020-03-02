@@ -142,9 +142,9 @@ public class Warehouse {
                     sqr = new BlockSquare(xval, yval, new Coord(xCoord++, yCoord));
                     blockSquares.add((BlockSquare) sqr);
                 } else if (isEntry) {
-                    sqr = new EntrySquare(xval, yval, new Coord(xCoord++, yCoord), squareNumber++);
+                    sqr = new EntrySquare(xval, yval, new Coord(xCoord++, yCoord));
                     entries.add((EntrySquare) sqr);
-                    pathSquares.add((EntrySquare) sqr);
+                    //pathSquares.add((EntrySquare) sqr);
                 } else if (isDestination) {
                     sqr = new DestinationSquare(xval, yval, new Coord(xCoord++, yCoord));
                     destinationSquares.add((DestinationSquare) sqr);
@@ -176,7 +176,7 @@ public class Warehouse {
         for (int y = 0; y < Simulator.SQUARE_PER_LINE; y++) {
             for (int x = 0; x < Simulator.SQUARE_PER_LINE; x++) {
                 // Don't proceed to add edges if the current square is a block, destination or an entry
-                if (warehouseArray[y][x] == 1 || warehouseArray[y][x] == 3)
+                if (warehouseArray[y][x] == 1 || warehouseArray[y][x] == 3 || warehouseArray[y][x] == 2)
                     continue;
 
                 Square s = getSquare(x, y);
@@ -204,7 +204,7 @@ public class Warehouse {
 
         // If it is a block or entry square, or there is no square at the given coordinates
         // simply return from the method
-        if (w == null || w instanceof BlockSquare || w instanceof DestinationSquare) {
+        if (w == null || w instanceof BlockSquare || w instanceof DestinationSquare || w instanceof EntrySquare) {
             return;
         }
         // If a square exists at the given coordinates connect the found square w,

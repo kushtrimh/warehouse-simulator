@@ -6,7 +6,7 @@ import java.awt.Image;
  * An Entry Square is a square from which packages
  * will be taken by the Transporter.
  */
-public class EntrySquare extends PathSquare {
+public class EntrySquare extends Square {
 
     /**
      * Two different images to be used, one where the square is loaded,
@@ -21,8 +21,8 @@ public class EntrySquare extends PathSquare {
      */
     private boolean loaded;
 
-    public EntrySquare(int xValue, int yValue, Coord coordinates, int sqrNum) throws SimulatorException {
-        super(xValue, yValue, coordinates, sqrNum);
+    public EntrySquare(int xValue, int yValue, Coord coordinates) throws SimulatorException {
+        super(xValue, yValue, coordinates);
     }
 
     public void setImages(Image loadedImage, Image unloadedImage) throws SimulatorException {
