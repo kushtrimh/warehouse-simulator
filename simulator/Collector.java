@@ -23,6 +23,7 @@ public class Collector extends SimElement {
     private Image img;
     private boolean loaded;
     private Payload payload;
+    private int heading;
 
 
     public Collector(Coord startCoordinates) throws SimulatorException {
@@ -37,6 +38,8 @@ public class Collector extends SimElement {
     public void load(Payload pkg) {
         payload = pkg;
         loaded = true;
+        System.out.println("I was called");
+        setImage(heading);
     }
 
     public void unload() {
@@ -113,6 +116,7 @@ public class Collector extends SimElement {
         } else {
             img = ((direction == Transporter.Step.DOWN) || (direction == Transporter.Step.UP)) ? yImg : xImg;
         }
+        heading = direction;
     }
 
     public void setXValue(int xvalue) {
