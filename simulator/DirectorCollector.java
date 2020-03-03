@@ -112,7 +112,7 @@ public class DirectorCollector implements Runnable {
                         entry.unload();
                     }
                 }
-                Thread.sleep(300);
+                Thread.sleep(500);
                 sim.setDestinationCoord(currentPayload.getDestination());
                 collector.load(currentPayload);
             }

@@ -38,7 +38,6 @@ public class Collector extends SimElement {
     public void load(Payload pkg) {
         payload = pkg;
         loaded = true;
-        System.out.println("I was called");
         setImage(heading);
     }
 

@@ -9,10 +9,10 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 public class Simulator {
-    public static final int SQUARE_SIZE = 40;
-    public static final int WIDTH = 640;
-    public static final int HEIGHT = 640;
-    public static final int SQUARE_PER_LINE = WIDTH / SQUARE_SIZE;
+    public static final int SQUARE_SIZE = 60;       //(int)(40 * SCALE);
+    public static final int WIDTH = 960;            //(int)(640 * SCALE);
+    public static final int HEIGHT = 960;           //(int)(640 * SCALE);
+    public static final int SQUARE_PER_LINE = 16;   //WIDTH / SQUARE_SIZE;
     public static final int FPS = 1000 / 50;
 
     private JFrame frame;
@@ -65,8 +65,7 @@ public class Simulator {
         // Settings for JFrame
         frame = new JFrame("Warehouse Simulator");
         frame.setContentPane(mainPanel);
-        // frame.setSize(WIDTH, HEIGHT);
-        frame.setSize(680, 680);
+        frame.setSize(WIDTH + 10, HEIGHT);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -100,7 +99,7 @@ public class Simulator {
          */
         private void drawSquares(Graphics g) {
             for (Square s : whouse.getSquares()) {
-                g.drawImage(s.getImage(), s.xValue(), s.yValue(), null);
+                g.drawImage(s.getImage(), s.xValue(), s.yValue(), SQUARE_SIZE, SQUARE_SIZE, null);
             }
         }
 
@@ -133,13 +132,13 @@ public class Simulator {
         private void drawTransporter(Graphics g) {
             Transporter t = whouse.getTransporter();
 
-            g.drawImage(t.getImage(), t.xValue(), t.yValue(), null);
+            g.drawImage(t.getImage(), t.xValue(), t.yValue(), SQUARE_SIZE, SQUARE_SIZE, null);
         }
 
         private void drawCollector(Graphics g) {
             Collector c = whouse.getCollector();
 
-            g.drawImage(c.getImage(), c.xValue(), c.yValue(), null);
+            g.drawImage(c.getImage(), c.xValue(), c.yValue(), SQUARE_SIZE, SQUARE_SIZE, null);
         }
 
         /**
@@ -148,7 +147,7 @@ public class Simulator {
         private void drawDestination(Graphics g) {
             if (destinationCoordinate != null) {
                 int[] values = Coord.getCoordinatePixelValues(destinationCoordinate);
-                g.drawImage(destCoordImage, values[0], values[1], null);
+                g.drawImage(destCoordImage, values[0], values[1], SQUARE_SIZE, SQUARE_SIZE, null);
             }
         }
 

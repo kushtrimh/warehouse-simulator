@@ -102,14 +102,11 @@ public class DirectorTransporter implements Runnable {
                 int collectY = 0, collectX = 0;
                 Coord collectorPosition = collector.getCoordinates();
                 
-                collectX = collectorPosition.X();
-                if (collectorPosition.Y() < ((sim.SQUARE_PER_LINE)/2)) {
-                    collectY = collectorPosition.Y() + 1;
-                } else {
-                    collectY = collectorPosition.Y() - 1;
-                }
+                collectX = collectorPosition.X() + 1;
+                collectY = collectorPosition.Y();
+                
                 sendTransporterTo(new Coord(collectX, collectY));
-                Thread.sleep(300);
+                Thread.sleep(500);
                 sim.setDestinationCoord(currentPayload.getDestination());
                 collector.unload();
                 transporter.load(currentPayload);
@@ -119,7 +116,7 @@ public class DirectorTransporter implements Runnable {
                 Coord payloadDest = currentPayload.getDestination();
                 sendTransporterTo(payloadDest);
 
-                Thread.sleep(300);
+                Thread.sleep(500);
 
                 currentPayload = null;
                 sim.setDestinationCoord(null);
@@ -137,14 +134,14 @@ public class DirectorTransporter implements Runnable {
                     }
                 }
 
-                Thread.sleep(300);
+                Thread.sleep(500);
                 sim.setDestinationCoord(currentPayload.getDestination());
 
             } else if (currentPayload != null){
                 Coord payloadDest = currentPayload.getDestination();
                 sendTransporterTo(payloadDest);
 
-                Thread.sleep(300);
+                Thread.sleep(500);
 
                 currentPayload = null;
                 sim.setDestinationCoord(null);

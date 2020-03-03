@@ -46,9 +46,6 @@ public class Factory implements Runnable {
                 // Add the new payload to the queue
                 payloads.add(new Payload(entry.getCoordinates(), destination));
                 entry.load();
-
-                System.out.println("Payload added.");
-                System.out.println(payloads);
             }
 
             try {
