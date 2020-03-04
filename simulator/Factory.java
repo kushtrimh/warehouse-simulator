@@ -27,6 +27,24 @@ public class Factory implements Runnable {
         entries = entr;
     }
 
+    public void setupFactory() {
+        Random r = new Random();
+        EntrySquare entry;
+        List<RoadSquare> dstCoords;
+        Coord destination;
+        for(int i = 0; i < entries.size(); i++) {
+            entry = entries.get(i);
+            // Get the destination coordinates for the selected BlockSquare
+            dstCoords = destinations.get(r.nextInt(destinations.size())).getDestinations();
+            // Select one of the destination coordinates randomly
+            destination = dstCoords.get(r.nextInt(dstCoords.size())).getCoordinates();
+            // Add the new payload to the queue
+            payloads.add(new Payload(entry.getCoordinates(), destination));
+            entry.load();
+        }
+    }
+
+    /*
     @Override
     public void run() {
         while (true) {
@@ -55,4 +73,5 @@ public class Factory implements Runnable {
             }
         }
     }
+    */
 }
