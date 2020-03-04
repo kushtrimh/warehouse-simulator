@@ -16,8 +16,6 @@ public class DirectorTransporter implements Runnable {
 
     private Payload currentPayload;
 
-    private int[][] warehousearray;
-
     public DirectorTransporter(Warehouse whouse, Simulator sim, BlockingQueue<Payload> pylds) {
         this.whouse = whouse;
         this.sim = sim;
@@ -121,6 +119,9 @@ public class DirectorTransporter implements Runnable {
                 currentPayload = null;
                 sim.setDestinationCoord(null);
                 transporter.unload();
+            }
+            else {
+                sendTransporterToBase();
             }
             /*
             if (currentPayload == null && !payloads.isEmpty()) {

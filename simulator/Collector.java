@@ -44,6 +44,7 @@ public class Collector extends SimElement {
     public void unload() {
         loaded = false;
         payload = null;
+        setImage(heading);
     }
 
     public Payload getPayload() {

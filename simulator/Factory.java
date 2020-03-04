@@ -7,7 +7,7 @@ import java.util.concurrent.BlockingQueue;
  * This class is used to handle the creation of payloads
  * that will be transported by the Transporter.
  */
-public class Factory implements Runnable {
+public class Factory {
 
     private BlockingQueue<Payload> payloads;
     private List<EntrySquare> entries;

@@ -9,7 +9,6 @@ public class DirectorCollector implements Runnable {
     private Warehouse whouse;
     private Simulator sim;
 
-    private Transporter transporter;
     private Collector collector;
 
     private BlockingQueue<Payload> payloads;
@@ -21,7 +20,6 @@ public class DirectorCollector implements Runnable {
     public DirectorCollector(Warehouse whouse, Simulator sim, BlockingQueue<Payload> pylds) {
         this.whouse = whouse;
         this.sim = sim;
-        transporter = whouse.getTransporter();
         collector = whouse.getCollector();
         payloads = pylds;
 
@@ -115,6 +113,9 @@ public class DirectorCollector implements Runnable {
                 Thread.sleep(500);
                 sim.setDestinationCoord(currentPayload.getDestination());
                 collector.load(currentPayload);
+            }
+            else if ((!collector.isloaded()) && (payloads.isEmpty())) {
+                sendCollectorToBase();
             }
         }
     }
